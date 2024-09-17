@@ -4,9 +4,9 @@ namespace App\FileHandler;
 
 class InputReader extends FileReader
 {
-  public function __construct(protected string $ext = 'csv')
+  public function __construct(protected string $ext = 'csv', string $storageDir)
   {
-    parent::__construct();
+    $this->setStorageDir($storageDir);
     $this->files = $this->loadFiles();
   }
 
@@ -15,12 +15,18 @@ class InputReader extends FileReader
    */
   protected function loadFiles(): array
   {
-    // load input directory based in ext
     return glob($this->getStorage() . "/*.{$this->ext}");
   }
 
-  public function getFiles(): array
+  public function getStorage(): string
   {
-    return $this->files;
+    return parent::getStorage() . $this->inputFilesPath;
+  }
+
+  public function setExt(string $ext): FileReader
+  {
+    parent::setExt($ext);
+    $this->files = $this->loadFiles();
+    return $this;
   }
 }

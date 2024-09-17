@@ -1,5 +1,4 @@
 <?php
-
 use PHPUnit\Framework\TestCase;
 use App\ProcessSpreadsheetToSql;
 use App\FileHandler\InputReader;
@@ -8,62 +7,45 @@ use App\Parser\ParseXlsxToCsv;
 
 class ProcessSpreadsheetToSqlTest extends TestCase
 {
-  protected $processor;
-
-  protected function setUp(): void
-  {
-    $this->processor = new ProcessSpreadsheetToSql();
-  }
-
-  public function testInstanceCreation()
-  {
-    $this->assertInstanceOf(ProcessSpreadsheetToSql::class, $this->processor);
-  }
-
   public function testConvertXlsxToCsv()
   {
+    // Create a mock of InputReader
     $inputReaderMock = $this->createMock(InputReader::class);
+
+    // Expect the performOperation method to be called once with the specified parameters
     $inputReaderMock->expects($this->once())
       ->method('performOperation')
       ->with([ParseXlsxToCsv::class, 'convert']);
 
-    $reflection = new \ReflectionClass($this->processor);
-    $property = $reflection->getProperty('inputReader');
-    $property->setAccessible(true);
-    $property->setValue($this->processor, $inputReaderMock);
+    // Pass the mock to the ProcessSpreadsheetToSql constructor
+    $processSpreadsheetToSql = new ProcessSpreadsheetToSql($inputReaderMock);
 
-    $this->processor->convertXlsxToCsv();
+    // Call the method to test
+    $processSpreadsheetToSql->convertXlsxToCsv();
   }
 
   public function testJoinFiles()
   {
-    $files = ['file1.csv', 'file2.csv'];
-    // create files 
-    foreach ($files as $file) {
-      touch(__DIR__ . "/../../storage/input/$file");
-    }
+    $headers = ['header1', 'header2', 'header3'];
 
-    $headers = ['header1', 'header2'];
-
+    // Mock InputReader
     $inputReaderMock = $this->createMock(InputReader::class);
-    $inputReaderMock->expects($this->once())
-      ->method('getFiles')
-      ->willReturn($files);
-
-    $csvParserMock = $this->getMockBuilder(CsvParser::class)
-      ->setConstructorArgs(['file1.csv'])
-      ->onlyMethods(['headers'])
+    // Create an instance of ProcessSpreadsheetToSql with the mocked InputReader
+    $processSpreadsheetToSql = $this->getMockBuilder(ProcessSpreadsheetToSql::class)
+      ->setConstructorArgs([$inputReaderMock])
+      ->onlyMethods(['getHeadersFromInputFiles'])
       ->getMock();
-    $csvParserMock->expects($this->once())
-      ->method('headers')
+
+
+    // Mock getHeadersFromInputFiles method
+    $processSpreadsheetToSql->expects($this->once())
+      ->method('getHeadersFromInputFiles')
       ->willReturn($headers);
 
-    $reflection = new \ReflectionClass($this->processor);
-    $property = $reflection->getProperty('inputReader');
-    $property->setAccessible(true);
-    $property->setValue($this->processor, $inputReaderMock);
-
+    // Expect the output to be the headers joined by commas
     $this->expectOutputString(implode(',', $headers));
-    $this->processor->joinFiles();
+
+    // Call the method to test
+    $processSpreadsheetToSql->joinFiles();
   }
 }

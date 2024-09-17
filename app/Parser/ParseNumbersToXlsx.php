@@ -2,13 +2,13 @@
 
 namespace App\Parser;
 
-class ParseXlsxToCsv
+class ParseNumbersToXlsx
 {
   public static function convert(string $inputFile)
   {
-    $outputFile = str_replace('.xlsx', '.csv', $inputFile);
-
-    $command = escapeshellcmd(XLSX2_CSV . " '$inputFile' '$outputFile'");
+    $outputFile = str_replace('.numbers', '.xlsx', $inputFile);
+    $pythonScript = __DIR__ . '/numbers_to_xlsx.py';
+    $command = escapeshellcmd(PYTHON . " '$pythonScript' '$inputFile' '$outputFile'");
 
     exec($command, $output, $returnVar);
 

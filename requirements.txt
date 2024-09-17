@@ -1,0 +1,2 @@
+jpype1==1.5.0
+aspose-cells==23.7.0
