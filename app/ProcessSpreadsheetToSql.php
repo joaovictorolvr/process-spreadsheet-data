@@ -5,6 +5,7 @@ use App\FileHandler\InputReader;
 use App\Parser\CsvParser;
 use App\Parser\ParseNumbersToXlsx;
 use App\Parser\ParseXlsxToCsv;
+use App\Utils\HeaderMap;
 
 class ProcessSpreadsheetToSql
 {
@@ -31,19 +32,17 @@ class ProcessSpreadsheetToSql
     $this->inputReader->setExt('csv');
   }
 
-  public function joinFiles()
-  {
-    //$this->inputReader->performOperation([CsvParser::class, 'removeHeaders']);
-    $combinedFile = $this->inputReader->combineFiles(MapCustomer::class, 'getHeaders');
-    return $combinedFile;
-  }
+  // public function joinFiles()
+  // {
+  //   //$this->inputReader->performOperation([CsvParser::class, 'removeHeaders']);
+  //   $combinedFile = $this->inputReader->combineFiles(MapCustomer::class, 'getHeaders');
+  //   return $combinedFile;
+  // }
 
-  public function mapAndCombineFiles()
+  public function mapAndCombineFiles(HeaderMap $mapper)
   {
     $this->inputReader->setExt('csv');
-    $customerMap = new MapCustomer;
-    $combinedFile = $this->inputReader->combineFiles([$customerMap, 'bindValues']);
-    return $combinedFile;
+    return $this->inputReader->combineFiles([$mapper, 'bindValues'], $mapper->getHeaders());
   }
 
   private function getHeadersFromInputFiles()

@@ -15,7 +15,7 @@ $processSpreadsheet->convertNumbers();
 $processSpreadsheet->convertXlsxToCsv();
 $headers = $processSpreadsheet->getHeaders();
 $inputHeader->setExt('csv');
-$combinedFile = $processSpreadsheet->mapAndCombineFiles();
+$combinedFile = $processSpreadsheet->mapAndCombineFiles(new App\MapCustomer());
 
 
 

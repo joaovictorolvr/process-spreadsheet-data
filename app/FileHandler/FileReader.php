@@ -40,7 +40,7 @@ abstract class FileReader
 
   protected abstract function loadFiles(): array;
 
-  public function combineFiles(callable $standartizerHeadersFunc): string
+  public function combineFiles(callable $standartizerHeadersFunc, array $headers): string
   {
     $filePath = $this->createCombinedFile();
     $fileHandle = fopen($filePath, 'w');
@@ -58,8 +58,11 @@ abstract class FileReader
       $headersFromFile = fgetcsv($handle);
       echo $file . PHP_EOL;
 
+      fputcsv($fileHandle, $headers);
+
       while (($data = fgetcsv($handle)) !== false) {
-        $mappedData = $standartizerHeadersFunc(array_combine($headersFromFile, $data));
+        $mappedData = array_combine($headersFromFile, $data);
+        $mappedData = $standartizerHeadersFunc($mappedData);
         fputcsv($fileHandle, $mappedData);
       }
       fclose($handle);
