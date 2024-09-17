@@ -1,0 +1,28 @@
+{
+    "version": "0.1.0",
+    "name": "softtor/process-spreadsheet-in-sql",
+    "description": "Processamento de arquivos CSV para SQL",
+    "type": "library",
+    "license": "ISC",
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    },
+    "authors": [
+        {
+            "name": "joaovictorolvr",
+            "email": "joaovoliveira2399@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.2",
+        "phpoffice/phpspreadsheet": "^2.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
+    "scripts": {
+        "test": "phpunit"
+    }
+}
