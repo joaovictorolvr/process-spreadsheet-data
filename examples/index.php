@@ -17,6 +17,11 @@ $headers = $processSpreadsheet->getHeaders();
 $inputHeader->setExt('csv');
 $combinedFile = $processSpreadsheet->mapAndCombineFiles(new App\MapCustomer());
 
+$customerParsed = $processSpreadsheet::processCsvFile(new \App\CustomerParser, $combinedFile);
+$productsParsed = $processSpreadsheet::processCsvFile(new \App\ProductsParser, $customerParsed);
+
+
+
 
 
 

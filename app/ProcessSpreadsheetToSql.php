@@ -32,17 +32,15 @@ class ProcessSpreadsheetToSql
     $this->inputReader->setExt('csv');
   }
 
-  // public function joinFiles()
-  // {
-  //   //$this->inputReader->performOperation([CsvParser::class, 'removeHeaders']);
-  //   $combinedFile = $this->inputReader->combineFiles(MapCustomer::class, 'getHeaders');
-  //   return $combinedFile;
-  // }
-
   public function mapAndCombineFiles(HeaderMap $mapper)
   {
     $this->inputReader->setExt('csv');
     return $this->inputReader->combineFiles([$mapper, 'bindValues'], $mapper->getHeaders());
+  }
+
+  public static function processCsvFile(ParserContract $parser, string $file)
+  {
+    return $parser::convert($file);
   }
 
   private function getHeadersFromInputFiles()

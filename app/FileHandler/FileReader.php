@@ -113,4 +113,10 @@ abstract class FileReader
     $this->files = $this->loadFiles();
     return $this;
   }
+
+  public function loadFile(string $file): self
+  {
+    $this->files = [$file];
+    return $this;
+  }
 }
