@@ -9,9 +9,9 @@ class CsvParser
     $this->file = $file;
   }
 
-  public function headers()
+  public static function headers(string $file)
   {
-    $file = fopen($this->file, 'r');
+    $file = fopen($file, 'r');
     $headers = fgetcsv($file);
     fclose($file);
     return $headers;

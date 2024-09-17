@@ -9,7 +9,7 @@ use App\Parser\ParseXlsxToCsv;
 class ProcessSpreadsheetToSql
 {
   private InputReader $inputReader;
-  private array $headers;
+  private array $headers = [];
 
   public function __construct(InputReader $inputReader)
   {
@@ -27,25 +27,36 @@ class ProcessSpreadsheetToSql
   {
     $this->inputReader
       ->setExt('xlsx')
-      ->performOperation([ParseXlsxToCsv::class, 'convert'])
-      ->setExt('csv');
+      ->performOperation([ParseXlsxToCsv::class, 'convert']);
+    $this->inputReader->setExt('csv');
   }
 
   public function joinFiles()
   {
-    $this->headers = $this->getHeadersFromInputFiles();
-    $this->inputReader->performOperation([CsvParser::class, 'removeHeaders']);
-    $combinedFile = $this->inputReader->combineFiles();
-    var_dump($this->headers);
-
+    //$this->inputReader->performOperation([CsvParser::class, 'removeHeaders']);
+    $combinedFile = $this->inputReader->combineFiles(MapCustomer::class, 'getHeaders');
+    return $combinedFile;
   }
 
-  public function getHeadersFromInputFiles()
+  public function mapAndCombineFiles()
   {
-    $files = $this->inputReader->getFiles();
-    $firstFile = $files[0];
-    $parser = new CsvParser($firstFile);
-    $headers = $parser->headers();
-    return $headers;
+    $this->inputReader->setExt('csv');
+    $customerMap = new MapCustomer;
+    $combinedFile = $this->inputReader->combineFiles([$customerMap, 'bindValues']);
+    return $combinedFile;
+  }
+
+  private function getHeadersFromInputFiles()
+  {
+    $this->inputReader->setExt('csv');
+    return $this->inputReader->performOperation([CsvParser::class, 'headers']);
+  }
+
+  public function getHeaders()
+  {
+    $headers = [];
+    array_push($headers, $this->getHeadersFromInputFiles());
+    $this->headers = $headers;
+    return $this->headers;
   }
 }

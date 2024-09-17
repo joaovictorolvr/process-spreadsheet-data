@@ -40,7 +40,7 @@ abstract class FileReader
 
   protected abstract function loadFiles(): array;
 
-  public function combineFiles(): string
+  public function combineFiles(callable $standartizerHeadersFunc): string
   {
     $filePath = $this->createCombinedFile();
     $fileHandle = fopen($filePath, 'w');
@@ -54,12 +54,13 @@ abstract class FileReader
         throw new \RuntimeException("Unable to open file for reading: $file");
       }
 
-      while (!feof($handle)) {
-        $chunk = fread($handle, 65536);
-        if ($chunk === false) {
-          throw new \RuntimeException("Error reading file: $file");
-        }
-        fwrite($fileHandle, $chunk);
+      // Skip the header row
+      $headersFromFile = fgetcsv($handle);
+      echo $file . PHP_EOL;
+
+      while (($data = fgetcsv($handle)) !== false) {
+        $mappedData = $standartizerHeadersFunc(array_combine($headersFromFile, $data));
+        fputcsv($fileHandle, $mappedData);
       }
       fclose($handle);
     }
@@ -94,12 +95,13 @@ abstract class FileReader
     return $this->files;
   }
 
-  public function performOperation(callable $operation): self
+  public function performOperation(callable $operation)
   {
+    $result = [];
     foreach ($this->getFiles() as $file) {
-      $operation($file);
+      $result[] = $operation($file);
     }
-    return $this;
+    return $result;
   }
 
   public function setExt(string $ext): self

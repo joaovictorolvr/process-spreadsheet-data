@@ -13,10 +13,9 @@ $inputHeader->createDirs();
 $processSpreadsheet = new App\ProcessSpreadsheetToSql($inputHeader);
 $processSpreadsheet->convertNumbers();
 $processSpreadsheet->convertXlsxToCsv();
-
+$headers = $processSpreadsheet->getHeaders();
 $inputHeader->setExt('csv');
-$processSpreadsheet->joinFiles();
-
+$combinedFile = $processSpreadsheet->mapAndCombineFiles();
 
 
 
