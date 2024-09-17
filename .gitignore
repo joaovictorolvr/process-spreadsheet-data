@@ -1,1 +1,6 @@
 vendor/
+
+#files
+*.csv
+*.numbers
+*.xlsx
