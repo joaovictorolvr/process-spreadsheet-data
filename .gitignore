@@ -1,6 +1,6 @@
 vendor/
 venv/
-
+data/
 #files
 *.csv
 *.numbers

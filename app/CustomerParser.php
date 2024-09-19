@@ -5,6 +5,8 @@ namespace App;
 
 class CustomerParser implements ParserContract
 {
+  public static $customerId = 1;
+
   public static function filter(array $row, string $key)
   {
     /**
@@ -35,7 +37,7 @@ class CustomerParser implements ParserContract
       fputcsv($newHandle, $header);
       $productsIndex = array_search('produtos', $header);
       $trackingCodeIndex = array_search('rastreio', $header);
-      $id = 1;
+      $id = self::$customerId;
       while (($data = fgetcsv($handle)) !== FALSE) {
         if (!self::filter($data, $productsIndex - 1)) {
           continue;

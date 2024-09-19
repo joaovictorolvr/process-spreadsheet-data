@@ -16,7 +16,7 @@ $processSpreadsheet->convertXlsxToCsv();
 $headers = $processSpreadsheet->getHeaders();
 $inputHeader->setExt('csv');
 $combinedFile = $processSpreadsheet->mapAndCombineFiles(new App\MapCustomer());
-
+\App\CustomerParser::$customerId = 1261410;
 $customerParsed = $processSpreadsheet::processCsvFile(new \App\CustomerParser, $combinedFile);
 $productsParsed = $processSpreadsheet::processCsvFile(new \App\ProductsParser, $customerParsed);
 

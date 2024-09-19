@@ -56,4 +56,9 @@ class ProcessSpreadsheetToSql
     $this->headers = $headers;
     return $this->headers;
   }
+
+  public function toSql(string $inputFile)
+  {
+
+  }
 }

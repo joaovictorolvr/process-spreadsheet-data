@@ -1,0 +1,36 @@
+services:
+  mariadb:
+    image: mariadb:10.5
+    container_name: process-data-container
+    environment:
+      MARIADB_USER: root
+      MARIADB_ROOT_PASSWORD: 'root'
+      MARIADB_DATABASE: db-list
+    networks:
+      - default
+    ports:
+      - "3308:3306"
+    volumes:
+      - ./data:/var/lib/mysql
+      - ./scripts:/docker-entrypoint-initdb.d
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: process-data-phpmyadmin
+    restart: always
+    networks:
+      - default
+    environment:
+      PMA_ARBITRARY: 1
+      PMA_HOST: mariadb
+      PMA_USER: root
+      PMA_PASSWORD: root
+      MEMORY_LIMIT: 2048M
+      UPLOAD_LIMIT: 2048M
+    ports:
+      - "8080:80"
+    depends_on:
+      - mariadb
+
+networks:
+  default:
+    driver: bridge
