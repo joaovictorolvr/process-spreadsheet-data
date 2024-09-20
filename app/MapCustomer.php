@@ -15,7 +15,7 @@ class MapCustomer extends HeaderMap
         'cpf' => ['cpf', 'CPF', 'Cpf', 'Cpf do cliente', 'cpf', "CPF/CNPJ"],
         'telefone' => ['telefone', 'Telefone', 'Telefone do cliente', 'phone'],
         'cep' => ['cep', 'CEP', 'Cep', 'Cep do cliente', 'cep'],
-        'endereco' => ['endereco', 'Endereco', 'Endereco do cliente', 'address'],
+        'endereco' => ['endereco', 'Endereco', 'Endereco do cliente', 'address', 'Endereço', 'endereço'],
         'numero' => ['numero', 'Número', 'Número do cliente', 'number', 'Number'],
         'data_de_pagamento' => ['data_de_pagamento', 'Data de pagamento', 'Data de pagamento do cliente', 'payment_date', 'Status'],
         'bairro' => ['bairro', 'Bairro', 'Bairro do cliente', 'neighborhood'],
